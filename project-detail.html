@@ -1,0 +1,973 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Project Detail — Samuel Adisi</title>
+  <link rel="shortcut icon" href="./assets/images/logo.ico" type="image/x-icon">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="./assets/css/style.css">
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    a { text-decoration: none; }
+    li { list-style: none; }
+
+    :root {
+      --smoky-black: hsl(0, 0%, 7%);
+      --eerie-black-1: hsl(240, 2%, 13%);
+      --eerie-black-2: hsl(240, 2%, 12%);
+      --jet: hsl(0, 0%, 22%);
+      --onyx: hsl(240, 1%, 17%);
+      --white-1: hsl(0, 0%, 100%);
+      --white-2: hsl(0, 0%, 98%);
+      --light-gray: hsl(0, 0%, 84%);
+      --light-gray-70: hsla(0, 0%, 84%, 0.7);
+      --orange-yellow: hsl(45, 100%, 72%);
+      --vegas-gold: hsl(45, 54%, 58%);
+      --ff: 'Poppins', sans-serif;
+      --shadow-1: -4px 8px 24px hsla(0,0%,0%,0.25);
+      --shadow-2: 0 16px 30px hsla(0,0%,0%,0.25);
+      --bg-gradient-onyx: linear-gradient(to bottom right, hsl(240,1%,25%) 3%, hsl(0,0%,19%) 97%);
+      --bg-gradient-jet: linear-gradient(to bottom right, hsla(240,1%,18%,0.251) 0%, hsla(240,2%,11%,0) 100%), hsl(240,2%,13%);
+      --bg-gradient-yellow-1: linear-gradient(to bottom right, hsl(45,100%,71%) 0%, hsla(36,100%,69%,0) 50%);
+      --bg-gradient-yellow-2: linear-gradient(135deg, hsla(45,100%,71%,0.251) 0%, hsla(35,100%,68%,0) 59.86%), hsl(240,2%,13%);
+      --border-gradient-onyx: linear-gradient(to bottom right, hsl(0,0%,25%) 0%, hsla(0,0%,25%,0) 50%);
+      --text-gradient-yellow: linear-gradient(to right, hsl(45,100%,72%), hsl(35,100%,68%));
+      --transition-1: 0.25s ease;
+      --transition-2: 0.5s ease-in-out;
+    }
+
+    body {
+      font-family: var(--ff);
+      background: var(--smoky-black);
+      color: var(--white-2);
+      min-height: 100vh;
+    }
+
+    /* ======= LAYOUT ======= */
+    .detail-main {
+      margin: 15px 12px;
+      margin-bottom: 75px;
+      min-width: 259px;
+    }
+
+    /* ======= SIDEBAR (reuse from main) ======= */
+    .sidebar {
+      background: var(--eerie-black-2);
+      border: 1px solid var(--jet);
+      border-radius: 20px;
+      padding: 15px;
+      box-shadow: var(--shadow-1);
+      margin-bottom: 15px;
+      max-height: 112px;
+      overflow: hidden;
+      transition: var(--transition-2);
+      z-index: 1;
+    }
+    .sidebar.active { max-height: 405px; }
+
+    .sidebar-info {
+      position: relative;
+      display: flex;
+      justify-content: flex-start;
+      align-items: center;
+      gap: 15px;
+    }
+    .avatar-box {
+      background: var(--bg-gradient-onyx);
+      border-radius: 20px;
+      flex-shrink: 0;
+    }
+    .avatar-box img { display: block; }
+    .info-content .name {
+      color: var(--white-2);
+      font-size: 17px;
+      font-weight: 500;
+      letter-spacing: -0.25px;
+      margin-bottom: 10px;
+    }
+    .info-content .title {
+      color: var(--white-1);
+      background: var(--onyx);
+      font-size: 11px;
+      font-weight: 300;
+      width: max-content;
+      padding: 3px 12px;
+      border-radius: 8px;
+    }
+    .info_more-btn {
+      position: absolute;
+      top: -15px;
+      right: -15px;
+      border-radius: 0 15px;
+      font-size: 13px;
+      color: var(--orange-yellow);
+      background: var(--border-gradient-onyx);
+      padding: 10px;
+      box-shadow: var(--shadow-2);
+      transition: var(--transition-1);
+      z-index: 1;
+      border: none;
+      cursor: pointer;
+    }
+    .info_more-btn::before {
+      content: "";
+      position: absolute;
+      inset: 1px;
+      border-radius: inherit;
+      background: var(--bg-gradient-jet);
+      transition: var(--transition-1);
+      z-index: -1;
+    }
+    .info_more-btn:hover, .info_more-btn:focus { background: var(--bg-gradient-yellow-1); }
+    .info_more-btn:hover::before, .info_more-btn:focus::before { background: var(--bg-gradient-yellow-2); }
+    .info_more-btn span { display: none; }
+
+    .sidebar-info_more {
+      opacity: 0;
+      visibility: hidden;
+      transition: var(--transition-2);
+    }
+    .sidebar.active .sidebar-info_more { opacity: 1; visibility: visible; }
+
+    .separator {
+      width: 100%;
+      height: 1px;
+      background: var(--jet);
+      margin: 16px 0;
+    }
+    .contacts-list {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 16px;
+    }
+    .contact-item {
+      min-width: 100%;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+    .icon-box {
+      position: relative;
+      background: var(--border-gradient-onyx);
+      width: 30px;
+      height: 30px;
+      border-radius: 8px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 16px;
+      color: var(--orange-yellow);
+      box-shadow: var(--shadow-1);
+      z-index: 1;
+      flex-shrink: 0;
+    }
+    .icon-box::before {
+      content: "";
+      position: absolute;
+      inset: 1px;
+      background: var(--eerie-black-1);
+      border-radius: inherit;
+      z-index: -1;
+    }
+    .contact-info { max-width: calc(100% - 46px); width: calc(100% - 46px); }
+    .contact-title {
+      color: hsla(0,0%,84%,0.7);
+      font-size: 11px;
+      text-transform: uppercase;
+      margin-bottom: 2px;
+    }
+    .contact-info .contact-link, .contact-info address {
+      color: var(--white-2);
+      font-size: 13px;
+      font-style: normal;
+    }
+    .social-list {
+      display: flex;
+      justify-content: flex-start;
+      align-items: center;
+      gap: 15px;
+      padding-bottom: 4px;
+      padding-left: 7px;
+    }
+    .social-item .social-link {
+      color: hsla(0,0%,84%,0.7);
+      font-size: 18px;
+      display: block;
+    }
+    .social-item .social-link:hover { color: var(--light-gray); }
+
+    /* ======= NAVBAR ======= */
+    .navbar {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      background: hsla(240,1%,17%,0.75);
+      backdrop-filter: blur(10px);
+      border: 1px solid var(--jet);
+      border-radius: 12px 12px 0 0;
+      box-shadow: var(--shadow-2);
+      z-index: 5;
+    }
+    .navbar-list {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      align-items: center;
+      padding: 0 10px;
+    }
+    .navbar-link {
+      color: var(--light-gray);
+      font-size: 11px;
+      padding: 20px 7px;
+      transition: color var(--transition-1);
+      background: none;
+      border: none;
+      font-family: var(--ff);
+      cursor: pointer;
+    }
+    .navbar-link:hover { color: hsla(0,0%,84%,0.7); }
+    .navbar-link.active { color: var(--orange-yellow); }
+
+    /* ======= MAIN CONTENT AREA ======= */
+    .detail-content {
+      background: var(--eerie-black-2);
+      border: 1px solid var(--jet);
+      border-radius: 20px;
+      padding: 20px;
+      box-shadow: var(--shadow-1);
+    }
+
+    /* ======= BACK BTN ======= */
+    .back-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--light-gray);
+      font-size: 13px;
+      font-weight: 500;
+      padding: 8px 14px;
+      border-radius: 10px;
+      border: 1px solid var(--jet);
+      background: var(--onyx);
+      cursor: pointer;
+      transition: border-color 0.2s, color 0.2s;
+      margin-bottom: 24px;
+      font-family: var(--ff);
+    }
+    .back-btn:hover { border-color: var(--orange-yellow); color: var(--orange-yellow); }
+    .back-btn svg { width: 15px; height: 15px; }
+
+    /* ======= PROJECT DETAIL STYLES ======= */
+    .project-hero { margin-bottom: 28px; }
+
+    .project-hero-top {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 12px;
+      flex-wrap: wrap;
+    }
+
+    .detail-title {
+      font-size: clamp(1.3rem, 4vw, 2rem);
+      font-weight: 600;
+      color: var(--white-2);
+      line-height: 1.2;
+    }
+
+    .status-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: hsla(142,70%,45%,0.15);
+      color: hsl(142,70%,55%);
+      border: 1px solid hsla(142,70%,45%,0.3);
+      font-size: 11px;
+      font-weight: 600;
+      padding: 5px 12px;
+      border-radius: 20px;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+    .status-badge.wip {
+      background: hsla(45,100%,60%,0.12);
+      color: hsl(45,100%,72%);
+      border-color: hsla(45,100%,60%,0.3);
+    }
+    .status-dot {
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: currentColor;
+      animation: pulse 2s infinite;
+    }
+    @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.4} }
+
+    .detail-desc {
+      color: var(--light-gray);
+      font-size: 14px;
+      font-weight: 300;
+      line-height: 1.75;
+      margin-bottom: 18px;
+    }
+
+    .detail-meta-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 16px;
+      margin-bottom: 20px;
+    }
+    .meta-chip {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      color: var(--light-gray-70);
+      font-size: 12px;
+    }
+    .meta-chip svg { width: 14px; height: 14px; flex-shrink: 0; }
+
+    .detail-actions { display: flex; flex-wrap: wrap; gap: 10px; }
+
+    .btn-live {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      background: var(--orange-yellow);
+      color: hsl(0,0%,7%);
+      font-size: 13px;
+      font-weight: 600;
+      padding: 10px 20px;
+      border-radius: 12px;
+      transition: opacity 0.2s, transform 0.2s;
+      font-family: var(--ff);
+    }
+    .btn-live:hover { opacity: 0.88; transform: scale(0.98); }
+    .btn-live svg { width: 15px; height: 15px; }
+
+    .btn-source {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      background: var(--onyx);
+      color: var(--light-gray);
+      font-size: 13px;
+      font-weight: 500;
+      padding: 10px 20px;
+      border-radius: 12px;
+      border: 1px solid var(--jet);
+      transition: border-color 0.2s, color 0.2s;
+      font-family: var(--ff);
+    }
+    .btn-source:hover { border-color: var(--orange-yellow); color: var(--orange-yellow); }
+    .btn-source svg { width: 15px; height: 15px; }
+
+    /* ======= SECTIONS ======= */
+    .section { margin-bottom: 28px; }
+
+    .section-title {
+      font-size: 16px;
+      font-weight: 600;
+      color: var(--white-2);
+      margin-bottom: 14px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid var(--jet);
+    }
+
+    .gallery-grid { display: grid; grid-template-columns: 1fr; gap: 10px; }
+    @media(min-width: 500px) {
+      .gallery-grid { grid-template-columns: 1fr 1fr; }
+      .gallery-grid .gallery-main { grid-column: 1 / -1; }
+    }
+
+    .gallery-img {
+      width: 100%;
+      border-radius: 12px;
+      border: 1px solid var(--jet);
+      object-fit: cover;
+      display: block;
+      cursor: pointer;
+      transition: transform 0.25s, border-color 0.25s;
+    }
+    .gallery-img:hover { transform: scale(1.02); border-color: var(--orange-yellow); }
+
+    .about-box {
+      background: var(--onyx);
+      border: 1px solid var(--jet);
+      border-radius: 14px;
+      padding: 20px;
+      color: var(--light-gray);
+      font-size: 13px;
+      font-weight: 300;
+      line-height: 1.8;
+    }
+
+    .info-grid { display: grid; grid-template-columns: 1fr; gap: 14px; }
+    @media(min-width: 500px) { .info-grid { grid-template-columns: 1fr 1fr; } }
+
+    .info-card {
+      background: var(--onyx);
+      border: 1px solid var(--jet);
+      border-radius: 14px;
+      padding: 18px;
+    }
+    .info-card-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 14px;
+    }
+    .info-card-icon {
+      width: 36px; height: 36px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    .icon-blue  { background: hsla(210,100%,60%,0.12); color: hsl(210,100%,65%); }
+    .icon-yellow{ background: hsla(45,100%,60%,0.12);  color: var(--orange-yellow); }
+    .icon-red   { background: hsla(0,70%,60%,0.12);    color: hsl(0,70%,65%); }
+    .icon-green { background: hsla(142,70%,45%,0.12);  color: hsl(142,70%,55%); }
+    .info-card-icon svg { width: 18px; height: 18px; }
+    .info-card-title { font-size: 14px; font-weight: 600; color: var(--white-2); }
+
+    .tech-tags { display: flex; flex-wrap: wrap; gap: 7px; }
+    .tech-tag {
+      background: var(--eerie-black-2);
+      color: var(--light-gray);
+      font-size: 11px;
+      font-weight: 500;
+      padding: 4px 12px;
+      border-radius: 20px;
+      border: 1px solid var(--jet);
+    }
+
+    .feature-list, .challenge-list { display: flex; flex-direction: column; gap: 9px; }
+    .feature-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 9px;
+      color: var(--light-gray);
+      font-size: 12px;
+      font-weight: 300;
+      line-height: 1.5;
+    }
+    .feature-dot {
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: var(--orange-yellow);
+      flex-shrink: 0;
+      margin-top: 5px;
+    }
+    .challenge-item {
+      font-size: 12px;
+      color: var(--light-gray);
+      font-weight: 300;
+      line-height: 1.6;
+      padding-bottom: 9px;
+      border-bottom: 1px solid var(--jet);
+    }
+    .challenge-item:last-child { border-bottom: none; padding-bottom: 0; }
+    .challenge-label { font-weight: 600; color: var(--white-2); font-size: 12px; }
+
+    /* ======= NOT FOUND ======= */
+    .not-found { text-align: center; padding: 60px 20px; color: var(--light-gray); }
+    .not-found h2 { font-size: 22px; margin-bottom: 10px; color: var(--white-2); }
+
+    /* ======= LIGHTBOX ======= */
+    .lightbox {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: hsla(0,0%,0%,0.92);
+      z-index: 999;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+    .lightbox.open { display: flex; }
+    .lightbox img { max-width: 95vw; max-height: 90vh; border-radius: 12px; object-fit: contain; }
+    .lightbox-close {
+      position: absolute;
+      top: 20px; right: 20px;
+      background: var(--onyx);
+      border: 1px solid var(--jet);
+      color: var(--white-2);
+      width: 38px; height: 38px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      font-size: 18px;
+      transition: border-color 0.2s;
+    }
+    .lightbox-close:hover { border-color: var(--orange-yellow); }
+
+    /* ======= RESPONSIVE: 580px ======= */
+    @media (min-width: 580px) {
+      .detail-main { margin-top: 60px; margin-bottom: 100px; }
+      .sidebar {
+        width: 520px;
+        margin-inline: auto;
+        padding: 30px;
+        max-height: 180px;
+        margin-bottom: 30px;
+      }
+      .sidebar.active { max-height: 584px; }
+      .sidebar-info { gap: 25px; }
+      .avatar-box { border-radius: 30px; }
+      .avatar-box img { width: 120px; }
+      .info-content .name { margin-bottom: 15px; }
+      .info-content .title { padding: 5px 18px; }
+      .info_more-btn { top: -30px; right: -30px; padding: 10px 15px; }
+      .info_more-btn span { display: block; font-size: 12px; }
+      .info_more-btn ion-icon { display: none; }
+      .separator { margin: 32px 0; }
+      .contacts-list { gap: 20px; }
+      .navbar { border-radius: 20px 20px 0 0; }
+      .navbar-list { gap: 20px; }
+      .navbar-link { font-size: 14px; }
+      .detail-content { width: 520px; margin-inline: auto; padding: 30px; }
+    }
+
+    /* ======= RESPONSIVE: 768px ======= */
+    @media (min-width: 768px) {
+      .sidebar, .detail-content { width: 700px; }
+      .contacts-list { grid-template-columns: 1fr 1fr; gap: 30px 15px; }
+      .navbar-link { font-size: 15px; }
+    }
+
+    /* ======= RESPONSIVE: 1024px ======= */
+    @media (min-width: 1024px) {
+      .sidebar, .detail-content { width: 950px; box-shadow: 0 24px 80px hsla(0,0%,0%,0.25); }
+      .detail-main { margin-bottom: 60px; }
+      .navbar {
+        position: absolute;
+        bottom: auto; top: 0;
+        left: auto; right: 0;
+        width: max-content;
+        border-radius: 0 20px;
+        padding: 0 20px;
+        box-shadow: none;
+      }
+      .navbar-list { gap: 30px; padding: 0 20px; }
+      .navbar-link { font-weight: 500; }
+      .detail-main-inner {
+        position: relative;
+        width: max-content;
+        margin: auto;
+      }
+    }
+
+    /* ======= RESPONSIVE: 1250px ======= */
+    @media (min-width: 1250px) {
+      .detail-main {
+        max-width: 1200px;
+        margin-inline: auto;
+        display: flex;
+        justify-content: center;
+        align-items: flex-start;
+        gap: 25px;
+      }
+      .sidebar {
+        width: auto;
+        position: sticky;
+        top: 60px;
+        max-height: max-content !important;
+        height: max-content;
+        margin-bottom: 0;
+        padding-top: 60px;
+        flex-shrink: 0;
+        min-width: 260px;
+      }
+      .sidebar-info { flex-direction: column; }
+      .avatar-box img { width: 150px; }
+      .info-content .name { white-space: nowrap; text-align: center; }
+      .info-content .title { margin: auto; }
+      .info_more-btn { display: none; }
+      .sidebar-info_more { opacity: 1 !important; visibility: visible !important; }
+      .contacts-list { grid-template-columns: 1fr; }
+      .social-list { justify-content: center; }
+      .detail-content-wrap { flex: 1; min-width: 0; }
+      .detail-content { width: auto; }
+      .detail-main-inner { width: 100%; margin: 0; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- LIGHTBOX -->
+  <div class="lightbox" id="lightbox">
+    <button class="lightbox-close" id="lightboxClose">✕</button>
+    <img id="lightboxImg" src="" alt="">
+  </div>
+
+  <main class="detail-main">
+
+    <!-- ======= SIDEBAR ======= -->
+    <aside class="sidebar" data-sidebar>
+      <div class="sidebar-info">
+        <figure class="avatar-box">
+          <img src="./assets/images/my-avatar.png" alt="Samuel Adisi" width="80">
+        </figure>
+        <div class="info-content">
+          <h1 class="name">Samuel Adisi</h1>
+          <p class="title">Software Engineer & ML/AI Engineer</p>
+        </div>
+        <button class="info_more-btn" data-sidebar-btn>
+          <span>Show Contacts</span>
+          <ion-icon name="chevron-down"></ion-icon>
+        </button>
+      </div>
+
+      <div class="sidebar-info_more">
+        <div class="separator"></div>
+        <ul class="contacts-list">
+          <li class="contact-item">
+            <div class="icon-box"><ion-icon name="mail-outline"></ion-icon></div>
+            <div class="contact-info">
+              <p class="contact-title">Email</p>
+              <a href="mailto:samueladisi555@gmail.com" class="contact-link">samueladisi555@gmail.com</a>
+            </div>
+          </li>
+          <li class="contact-item">
+            <div class="icon-box"><ion-icon name="phone-portrait-outline"></ion-icon></div>
+            <div class="contact-info">
+              <p class="contact-title">Phone</p>
+              <a href="tel:+233537872807" class="contact-link">+233537872807</a>
+            </div>
+          </li>
+          <li class="contact-item">
+            <div class="icon-box"><ion-icon name="location-outline"></ion-icon></div>
+            <div class="contact-info">
+              <p class="contact-title">Location</p>
+              <address>Accra, Ghana</address>
+            </div>
+          </li>
+        </ul>
+        <div class="separator"></div>
+        <ul class="social-list">
+          <li class="social-item">
+            <a href="#" class="social-link"><ion-icon name="logo-facebook"></ion-icon></a>
+          </li>
+          <li class="social-item">
+            <a href="#" class="social-link"><ion-icon name="logo-twitter"></ion-icon></a>
+          </li>
+          <li class="social-item">
+            <a href="#" class="social-link"><ion-icon name="logo-instagram"></ion-icon></a>
+          </li>
+        </ul>
+      </div>
+    </aside>
+
+    <!-- ======= MAIN CONTENT ======= -->
+    <div class="detail-content-wrap">
+
+      <!-- NAVBAR -->
+      <nav class="navbar">
+        <ul class="navbar-list">
+          <li class="navbar-item">
+            <a href="./index.html" class="navbar-link">About</a>
+          </li>
+          <li class="navbar-item">
+            <a href="./index.html#resume" class="navbar-link">Resume</a>
+          </li>
+          <li class="navbar-item">
+            <a href="./index.html#portfolio" class="navbar-link active">Portfolio</a>
+          </li>
+          <li class="navbar-item">
+            <a href="./index.html#blog" class="navbar-link">Blog</a>
+          </li>
+          <li class="navbar-item">
+            <a href="./index.html#contact" class="navbar-link">Contact</a>
+          </li>
+        </ul>
+      </nav>
+
+      <!-- PROJECT DETAIL CARD -->
+      <div class="detail-content">
+
+        <button class="back-btn" onclick="history.back()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="15 18 9 12 15 6"/>
+          </svg>
+          Back to Projects
+        </button>
+
+        <div id="notFound" class="not-found" style="display:none;">
+          <h2>Project not found</h2>
+          <p>This project doesn't exist or hasn't been added yet.</p>
+        </div>
+
+        <div id="pageWrap"></div>
+
+      </div>
+    </div>
+
+  </main>
+
+  <script>
+    // ── Sidebar toggle ──
+    const sidebar    = document.querySelector('[data-sidebar]');
+    const sidebarBtn = document.querySelector('[data-sidebar-btn]');
+    if (sidebarBtn) sidebarBtn.addEventListener('click', () => sidebar.classList.toggle('active'));
+
+    // ── Projects data ──
+    const PROJECTS = {
+      'hr360': {
+        title: 'HR360',
+        status: 'live',
+        desc: 'A full-featured HR management dashboard built specifically for Ghanaian businesses. Handles payroll processing with SSNIT (5.5% employee, 13% employer) and GRA PAYE band calculations, employee onboarding via kanban, leave management, invoicing with 15% VAT, and benefits tracking with local providers like GLICO and Acacia.',
+        duration: '3 months',
+        team: '1 developer',
+        stack: 'React, Django REST',
+        liveUrl: 'https://hr-360-web.vercel.app',
+        githubUrl: 'https://github.com/samuel-adisi/hr360',
+        gallery: ['./assets/images/hr360.png'],
+        about: "HR360 was built to solve the gap in affordable, Ghana-specific HR tooling for SMEs. Most HR software on the market doesn't account for Ghanaian tax law — SSNIT tiers, GRA PAYE bands, or MoMo payroll disbursement. This dashboard handles all of it with a clean, intuitive UI inspired by tools like Rippling and Linear.",
+        tech: ['React', 'Recharts', 'Django REST Framework', 'PostgreSQL', 'JWT Auth', 'Python'],
+        features: [
+          'Ghana SSNIT & GRA PAYE payroll generation',
+          'Employee onboarding with 5-phase kanban board',
+          'Leave management with approval workflows',
+          'Invoicing with 15% VAT and GH₵ billing',
+          'Benefits management with local Ghanaian providers',
+          'Department analytics and HR insights panel',
+        ],
+        challenges: [
+          { label: 'Challenge 1', text: "Accurately implementing Ghana's GRA PAYE tax bands and SSNIT contribution logic in a reusable payroll engine." },
+          { label: 'Challenge 2', text: 'Designing a dashboard dense enough to be functional but clean enough not to overwhelm HR managers.' },
+          { label: 'Challenge 3', text: 'Building a multi-step payroll wizard that feels intuitive without losing configurability.' },
+        ],
+        solutions: [
+          { label: 'Solution 1', text: "Built a dedicated Ghana payroll calculation module with configurable tax bands that mirrors GRA's published rate tables." },
+          { label: 'Solution 2', text: 'Used a design token system inspired by Linear and Rippling, keeping color, spacing, and hierarchy tightly controlled.' },
+          { label: 'Solution 3', text: 'Implemented a 3-step wizard (configure → review/edit → confirm) with inline editing on the review step.' },
+        ],
+      },
+
+      'handout-pay': {
+        title: 'Handout Pay',
+        status: 'live',
+        desc: 'A payment platform built for Ghanaian university students to pay for course handouts digitally. Students pay via Paystack or MoMo, course reps manage their handouts and track payments, and admins oversee the full platform.',
+        duration: '2 months',
+        team: '1 developer',
+        stack: 'React, Django REST, Paystack',
+        liveUrl: 'https://handout-pay.vercel.app',
+        githubUrl: 'https://github.com/Samuel-Adisi/Handout-F',
+        gallery: ['./assets/images/handout.png'],
+        about: 'Handout Pay was born from a real frustration — students in Ghanaian universities still pay for course materials with physical cash, which is slow, error-prone, and hard to track. This platform digitizes the entire flow: reps upload handouts, set prices, and students pay instantly with MoMo or card.',
+        tech: ['React', 'Django REST Framework', 'Paystack API', 'MoMo API', 'JWT Auth', 'PostgreSQL'],
+        features: [
+          'Paystack and MoMo payment integration',
+          'Three-role system: student, course rep, admin',
+          'Course rep handout management dashboard',
+          'Student payment history and receipt download',
+          'Google OAuth login',
+          'JWT-based authentication with custom claims',
+        ],
+        challenges: [
+          { label: 'Challenge 1', text: 'Handling duplicate payment prevention when Paystack webhooks arrive multiple times for the same transaction.' },
+          { label: 'Challenge 2', text: 'Building a multi-role auth system where each role sees a completely different dashboard.' },
+          { label: 'Challenge 3', text: 'Managing N+1 query issues on the rep payments view with complex relational data.' },
+        ],
+        solutions: [
+          { label: 'Solution 1', text: 'Added a unique constraint on the payment reference field and wrapped the webhook handler in an IntegrityError catch.' },
+          { label: 'Solution 2', text: 'Used a custom JWT serializer to embed the user role in the token, then used React Router guards to redirect to the correct dashboard.' },
+          { label: 'Solution 3', text: 'Fixed with select_related on the queryset, reducing dozens of queries to a single JOIN.' },
+        ],
+      },
+
+      'makpilot': {
+        title: 'Makpilot AI Agent',
+        status: 'wip',
+        desc: 'An AI marketing agent platform that autonomously generates marketing strategies, runs multi-stage Claude AI chains, and integrates directly with Google Ads for campaign launch and live performance monitoring with anomaly detection.',
+        duration: '2 months',
+        team: '1 developer',
+        stack: 'React, Python, Django REST, Claude API',
+        liveUrl: 'https://makpilot.vercel.app',
+        githubUrl: null,
+        gallery: ['./assets/images/makpilot.png'],
+        about: 'Makpilot is built on the idea that marketing strategy should be autonomous. The system runs a 6-stage Claude AI chain — research, ideation, copy, targeting, scheduling, and synthesis — using a MiroFish architecture (3 parallel Haiku agents feeding a Sonnet synthesizer). It then pushes campaigns directly to Google Ads and monitors them in real time.',
+        tech: ['React', 'Django REST Framework', 'Claude API', 'Celery', 'Redis', 'PostgreSQL', 'Google Ads API'],
+        features: [
+          '6-stage Claude AI chain for autonomous marketing strategy generation',
+          'MiroFish: 3 parallel Haiku agents + Sonnet synthesizer',
+          'Google Ads OAuth integration and campaign launch',
+          'Live campaign performance monitoring with 15-min Celery beat',
+          'Z-score anomaly detection with auto-pause on underperforming campaigns',
+          'A/B test orchestration and creative fatigue detection',
+          'Contextual timing intelligence for ad scheduling',
+        ],
+        challenges: [
+          { label: 'Challenge 1', text: 'Coordinating 3 parallel AI agents and merging their outputs without losing context or coherence.' },
+          { label: 'Challenge 2', text: 'Implementing statistically valid anomaly detection that avoids false positives on low-traffic campaigns.' },
+          { label: 'Challenge 3', text: 'Managing Celery beat scheduling across multiple campaign types without task collision.' },
+        ],
+        solutions: [
+          { label: 'Solution 1', text: 'Used async task dispatch for Haiku agents with a merge step that feeds all three outputs as a structured prompt to the Sonnet synthesizer.' },
+          { label: 'Solution 2', text: 'Added a minimum impression gate before Z-score evaluation fires, preventing false anomaly flags on campaigns with < 100 impressions.' },
+          { label: 'Solution 3', text: 'Implemented task locking with Redis to prevent overlapping Celery beats on the same campaign ID.' },
+        ],
+      },
+
+      'phoenix-mall': {
+        title: 'PhoeniX Mall',
+        status: 'wip',
+        desc: 'A modern e-commerce storefront inspired by Inspire Uplift. Features product discovery, category browsing, horizontal scroll product rows, a smart sidebar, and a fully responsive layout.',
+        duration: '1 month',
+        team: '1 developer',
+        stack: 'React, Tailwind CSS',
+        liveUrl: null,
+        githubUrl: null,
+        gallery: ['./assets/images/project-3.jpg'],
+        about: 'PhoeniX Mall is an e-commerce frontend built as a design and architecture exercise — recreating the feel of a high-conversion product marketplace with smooth UX patterns like horizontal scroll discovery rows, smart sidebar reveal on scroll, and clean product cards.',
+        tech: ['React', 'Tailwind CSS', 'React Router', 'Vite'],
+        features: [
+          'Horizontal scroll product rows with chevron navigation',
+          'Smart sidebar that reveals after hero scrolls out of view',
+          'Category section with dynamic filtering',
+          'Featured, Most Reviewed, and Recently Viewed sections',
+          'Fully responsive mobile layout',
+        ],
+        challenges: [
+          { label: 'Challenge 1', text: 'Implementing a sidebar that fades in only after the user has scrolled past the hero and been idle for 500ms.' },
+          { label: 'Challenge 2', text: 'Managing horizontal scroll rows without native scrollbar while keeping chevron navigation accessible.' },
+          { label: 'Challenge 3', text: 'Keeping a single source of horizontal padding across deeply nested layout components.' },
+        ],
+        solutions: [
+          { label: 'Solution 1', text: 'Used an IntersectionObserver on the hero + a debounced idle timer to trigger the sidebar CSS transition.' },
+          { label: 'Solution 2', text: 'Applied overflow-x: auto with scrollbar-width: none and programmatic scrollBy on chevron click.' },
+          { label: 'Solution 3', text: 'Established a single px-2 wrapper div as the one source of truth for horizontal padding, with ml-[70px] on the main for sidebar offset.' },
+        ],
+      },
+    };
+
+    // ── Render ──
+    const params  = new URLSearchParams(window.location.search);
+    const id      = params.get('id');
+    const project = PROJECTS[id];
+    const wrap    = document.getElementById('pageWrap');
+    const notFound = document.getElementById('notFound');
+
+    if (!project) {
+      notFound.style.display = 'block';
+    } else {
+      document.title = `${project.title} — Samuel Adisi`;
+      renderProject(project);
+    }
+
+    function svgIcon(type) {
+      const icons = {
+        calendar: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>`,
+        users:    `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>`,
+        code:     `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>`,
+        external: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>`,
+        github:   `<svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.3 3.44 9.8 8.2 11.38.6.11.82-.26.82-.57 0-.28-.01-1.02-.01-2-3.34.72-4.04-1.61-4.04-1.61-.54-1.38-1.33-1.75-1.33-1.75-1.09-.74.08-.73.08-.73 1.2.09 1.84 1.24 1.84 1.24 1.07 1.83 2.8 1.3 3.49 1 .11-.78.42-1.3.76-1.6-2.67-.3-5.47-1.33-5.47-5.93 0-1.31.47-2.38 1.24-3.22-.13-.3-.54-1.52.12-3.18 0 0 1.01-.32 3.3 1.23a11.5 11.5 0 0 1 3-.4c1.02 0 2.04.14 3 .4 2.28-1.55 3.29-1.23 3.29-1.23.66 1.66.25 2.88.12 3.18.77.84 1.24 1.91 1.24 3.22 0 4.61-2.81 5.63-5.48 5.92.43.37.81 1.1.81 2.22 0 1.6-.01 2.9-.01 3.29 0 .32.22.69.83.57C20.56 21.8 24 17.3 24 12c0-6.63-5.37-12-12-12z"/></svg>`,
+        star:     `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>`,
+        target:   `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>`,
+        bulb:     `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="9" y1="18" x2="15" y2="18"/><line x1="10" y1="22" x2="14" y2="22"/><path d="M12 2a7 7 0 0 1 7 7c0 2.38-1.19 4.47-3 5.74V17H8v-2.26C6.19 13.47 5 11.38 5 9a7 7 0 0 1 7-7z"/></svg>`,
+      };
+      return icons[type] || '';
+    }
+
+    function renderProject(p) {
+      const galleryHTML = p.gallery.map((src, i) =>
+        `<img src="${src}" alt="screenshot ${i+1}" class="gallery-img ${i===0?'gallery-main':''}" onclick="openLightbox('${src}')">`
+      ).join('');
+
+      const actionsHTML = `
+        ${p.liveUrl   ? `<a href="${p.liveUrl}"   target="_blank" class="btn-live">${svgIcon('external')} View Live Site</a>` : ''}
+        ${p.githubUrl ? `<a href="${p.githubUrl}" target="_blank" class="btn-source">${svgIcon('github')} View Source</a>` : ''}
+      `;
+
+      const techHTML       = p.tech.map(t => `<span class="tech-tag">${t}</span>`).join('');
+      const featuresHTML   = p.features.map(f => `<div class="feature-item"><span class="feature-dot"></span><span>${f}</span></div>`).join('');
+      const challengesHTML = p.challenges.map(c => `<div class="challenge-item"><span class="challenge-label">${c.label}:</span> ${c.text}</div>`).join('');
+      const solutionsHTML  = p.solutions.map(s => `<div class="challenge-item"><span class="challenge-label">${s.label}:</span> ${s.text}</div>`).join('');
+
+      wrap.innerHTML = `
+        <div class="project-hero">
+          <div class="project-hero-top">
+            <h1 class="detail-title">${p.title}</h1>
+            <span class="status-badge ${p.status === 'wip' ? 'wip' : ''}">
+              <span class="status-dot"></span>
+              ${p.status === 'live' ? 'Live' : 'In Progress'}
+            </span>
+          </div>
+          <p class="detail-desc">${p.desc}</p>
+          <div class="detail-meta-row">
+            <span class="meta-chip">${svgIcon('calendar')} ${p.duration}</span>
+            <span class="meta-chip">${svgIcon('users')} ${p.team}</span>
+            <span class="meta-chip">${svgIcon('code')} ${p.stack}</span>
+          </div>
+          <div class="detail-actions">${actionsHTML}</div>
+        </div>
+
+        <div class="section">
+          <h2 class="section-title">Project Gallery</h2>
+          <div class="gallery-grid">${galleryHTML}</div>
+        </div>
+
+        <div class="section">
+          <h2 class="section-title">About This Project</h2>
+          <div class="about-box">${p.about}</div>
+        </div>
+
+        <div class="section">
+          <div class="info-grid">
+            <div class="info-card">
+              <div class="info-card-header">
+                <div class="info-card-icon icon-blue">${svgIcon('code')}</div>
+                <h3 class="info-card-title">Technologies Used</h3>
+              </div>
+              <div class="tech-tags">${techHTML}</div>
+            </div>
+            <div class="info-card">
+              <div class="info-card-header">
+                <div class="info-card-icon icon-yellow">${svgIcon('star')}</div>
+                <h3 class="info-card-title">Key Features</h3>
+              </div>
+              <div class="feature-list">${featuresHTML}</div>
+            </div>
+            <div class="info-card">
+              <div class="info-card-header">
+                <div class="info-card-icon icon-red">${svgIcon('target')}</div>
+                <h3 class="info-card-title">Challenges</h3>
+              </div>
+              <div class="challenge-list">${challengesHTML}</div>
+            </div>
+            <div class="info-card">
+              <div class="info-card-header">
+                <div class="info-card-icon icon-green">${svgIcon('bulb')}</div>
+                <h3 class="info-card-title">Solutions</h3>
+              </div>
+              <div class="challenge-list">${solutionsHTML}</div>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    // ── Lightbox ──
+    function openLightbox(src) {
+      document.getElementById('lightboxImg').src = src;
+      document.getElementById('lightbox').classList.add('open');
+    }
+    document.getElementById('lightboxClose').onclick = () =>
+      document.getElementById('lightbox').classList.remove('open');
+    document.getElementById('lightbox').onclick = (e) => {
+      if (e.target === document.getElementById('lightbox'))
+        document.getElementById('lightbox').classList.remove('open');
+    };
+  </script>
+
+  <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
+  <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
+</body>
+</html>
